@@ -1,6 +1,6 @@
 <?php
 require dirname(__FILE__) . '/trip_util.php';
-$gobackURL = "trip_form.php";
+$gobackURL = "trip_form2.php";
 
 if(!chen($_POST)){
     $encoding = mb_internal_encoding();
@@ -10,8 +10,8 @@ if(!chen($_POST)){
 $_POST = es($_POST);
 
 $dsn = 'mysql:dbname=trip;host=localhost;charset=utf8';
-$user = "root";
-$password = "";
+$user = "yanagina";
+$password = "atsuki0229";
 ?>
 
 <!DOCTYPE html>
@@ -66,11 +66,15 @@ $password = "";
     div.col-3{
         text-align: center;
     }
+    img{
+        width: 100px;
+        height: 100px; 
+    }
     </style>
 </head>
     <header>
     <div class="container mt-3">
-        <h1 class="title text-center mt-5 "><a href="trip_view.php">旅行共有サイト</a></h1>
+        <h1 class="title text-center mt-5 "><a href="trip_view2.php">旅行共有サイト</a></h1>
         <h5 class="title text-center mt-3">あなたのおすすめ場所を共有しよう！</h5>
             <div class="row">
             <div class="col-3">HOME作成中<br/>(ログイン機能搭載予定)</div>
@@ -78,7 +82,7 @@ $password = "";
                 <a href="trip_view2.php">記事閲覧</a>
             </div>
             <div class="col-3">
-                <a href="trip_from2.php">記事投稿</a>
+                <a href="trip_form2.php">記事投稿</a>
             </div>
             <div class="col-3">お問い合わせ作成中<br/>(割勘アプリ公開予定)</div>
             </div>
@@ -133,9 +137,10 @@ $password = "";
                 print '<div>';
                 print '<table>';
                 print '<thead class ="thead-light"><tr>';
-                print '<th scope = "col-4">場所</th>';
-                print '<th scope = "col-4">目的</th>';
-                print '<th scope = "col-4">感想</th>';
+                print '<th scope = "col-3">場所</th>';
+                print '<th scope = "col-3">目的</th>';
+                print '<th scope = "col-3">感想</th>';
+                print '<th scope = "col-3">画像</th>';
                 // print '<th class="col-xs-3 col-ms-3 col-md-4 col-lg-4">場所</th>';
                 // print '<th class="col-xs-3 col-ms-3 col-md-3 col-lg-4">目的</th>';
                 // print '<th class="col-xs-1 col-ms-1 col-md-1 col-lg-1">感想</th>';
@@ -149,6 +154,11 @@ $password = "";
                 echo '<td>', es($row['prefecture']), '</td>';
                 echo '<td>', es($row['purpose']), '</td>';
                 echo '<td>', es($row['impressions']), '</td>';
+                echo '<td><img src=', es($row['images']), '></td>';
+
+                // 問題はここ
+                // echo '<td>', es($row['images']), '</td>';
+                // こちらでsrcを用いらないとデータ名のみが表示されてしまう。
                 // echo '<td>', es($row["prefecture"]), '</td>';
                 // echo '<td>', es($row["purpose"]), '</td>';
                 // echo '<td>', es($row["impressions"]), '</td>';

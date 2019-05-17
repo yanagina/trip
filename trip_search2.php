@@ -1,7 +1,6 @@
-
 <?php
 require dirname(__FILE__) . '/trip_util.php';
-$gobackURL = "trip_view.php";
+$gobackURL = "trip_form2.php";
 
 if(!chen($_POST)){
     $encoding = mb_internal_encoding();
@@ -11,8 +10,8 @@ if(!chen($_POST)){
 $_POST = es($_POST);
 
 $dsn = 'mysql:dbname=trip;host=localhost;charset=utf8';
-$user = "root";
-$password = "";
+$user = "yanagina";
+$password = "atsuki0229";
 ?>
 
 <!DOCTYPE html>
@@ -78,11 +77,15 @@ $password = "";
         border-color:rgb(255, 189, 124);
         text-align: center;
     }
+    img{
+        width: 100px;
+        height: 100px; 
+    }
   </style>
 </head>
     <header>
     <div class="container mt-3">
-        <h1 class="title text-center m-4"><a href="trip_view.php">旅行共有サイト</a></h1>
+        <h1 class="title text-center m-5"><a href="trip_view.php">旅行共有サイト</a></h1>
         <h5 class="title text-center m-3">あなたのおすすめ場所を共有しよう！</h5>
         <div class="row">
             <div class="col-3">HOME作成中<br/>(ログイン機能搭載予定)</div>
@@ -100,13 +103,14 @@ $password = "";
             <?php
             $search = $_POST['search'];
             $prefecture =$_POST['prefecture'];
+
             // var_dump($search);
             // var_dump($prefecture);
             try {
             $pdo = new PDO($dsn, $user, $password);
             $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "SELECT * FROM article WHERE CONCAT(purpose, impressions) LIKE (:search) AND prefecture = (:prefecture)";
+            $sql = "SELECT * FROM article WHERE CONCAT(purpose, impressions, images) LIKE (:search) AND prefecture = (:prefecture)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindValue(':search', "%{$search}%", PDO::PARAM_STR);
             $stmt->bindValue(':prefecture', "{$prefecture}",PDO::PARAM_STR);
@@ -120,19 +124,22 @@ $password = "";
             // print '<div class="user-kuchikomi mt-1">';
             print "場所「{$prefecture}」・キーワード「{$search}」が含まれるもの</br>";
             echo '<div class = "container mt-3">';
-            print '<div class="row" id="fix">';
-            print '<div class="col-sm">場所</div>';
-            print '<div class="col-sm">目的</div>';
-            print '<div class="col-sm">感想</div>';
-            print '</div>';
+            print '<table>';
+            print '<thead class = "thead-light"><tr>';
+            print '<th scope = "col-3">場所</th>';
+            print '<th scope = "col-3">目的</th>';
+            print '<th scope = "col-3">感想</th>';
+            print '<th scope = "col-3">画像</th>';
+            print '</thaad></tr>';
             foreach ($result as $row){
-            echo '<div class="row" id="fix">';
-            echo '<div class="col-sm">', es($row['prefecture']), '</div>';
-            echo '<div class="col-sm">', es($row['purpose']), '</div>';
-            echo '<div class="col-sm">', es($row['impressions']), '</div>';
-            echo '</div>';
-            // echo '</div>';
-            // echo '</div>';
+            print '<tbody>';
+            print '<tr>'; 
+            echo '<td>', es($row['prefecture']), '</td>';
+            echo '<td>', es($row['purpose']), '</td>';
+            echo '<td>', es($row['impressions']), '</td>';
+            echo '<td><img src=', es($row['images']), '></td>';
+            echo '</tr>';
+            print '</tbady>';
             }
             echo "</tbody>";
             echo "</table>";   

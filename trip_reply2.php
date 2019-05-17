@@ -32,12 +32,12 @@ if (isset($_POST['impressions'])) {
 // ここから画像
 if(is_uploaded_file($_FILES['images']['tmp_name'])){
     if(!file_exists('upload')){
-        // mkdir('upload');
+        mkdir('upload');
     }
     $images = 'upload/' . basename($_FILES['images']['name']);
     if(move_uploaded_file($_FILES['images']['tmp_name'],$images)){
-        echo $images, 'のアップロードに成功しました。';
-        echo '<p><img src="',$images,'"><p>';
+        // echo $images, 'のアップロードに成功しました。';
+        // echo '<p><img src="',$images,'"><p>';
     } else{
         $errors[] = "アップロードに失敗しました。";
     }
@@ -45,7 +45,6 @@ if(is_uploaded_file($_FILES['images']['tmp_name'])){
         $errors[] = "画像をアップし直してください。";
 }
 
-    // if ($prefecture==''||$purpose==''||$impressions=='') {
 if (count($errors)>0) {
     echo '<ol class="error">';
     foreach ($errors as $value) {
@@ -107,13 +106,13 @@ $password = "atsuki0229";
     </style>
 </head>
 <header>
-    <h1 class="title text-center m-4"><a href="trip_view.php">旅行共有サイト</a></h1>
+    <h1 class="title text-center m-4"><a href="trip_view2.php">旅行共有サイト</a></h1>
     <h5 class="title text-center m-3">あなたのおすすめ場所を共有しよう！</h5>
     <nav id="global_navi">
     <ul class="nav nav-pills nav-fill">
     <li class="nav-item">HOME作成中(ログイン機能搭載予定)</li>
     <li class="nav-item">
-        <a href="trip_view.php">記事閲覧</a>
+        <a href="trip_view2.php">記事閲覧</a>
     </li>
     <li class="nav-item">
         <a href="trip_form.php">記事投稿</a>
@@ -130,13 +129,13 @@ $password = "atsuki0229";
         
         // 画像確認部分
         
-        // $sql = "INSERT INTO article(prefecture, purpose, impressions, images) VALUES (:prefecture, :purpose, :impressions :images)";
-        $sql = "INSERT INTO article(prefecture, purpose, impressions) VALUES (:prefecture, :purpose, :impressions)";
+        $sql = "INSERT INTO article(prefecture, purpose, impressions, images) VALUES (:prefecture, :purpose, :impressions, :images)";
+        // $sql = "INSERT INTO article(prefecture, purpose, impressions) VALUES (:prefecture, :purpose, :impressions)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':prefecture', $prefecture, PDO::PARAM_STR);
         $stmt->bindValue(':purpose', $purpose, PDO::PARAM_STR);
         $stmt->bindValue(':impressions', $impressions, PDO::PARAM_STR);
-        // $stmt->bindValue(':images', $images, PDO::PARAM_STR);
+        $stmt->bindValue(':images', $images, PDO::PARAM_STR);
         if ($stmt->execute()) {
         $sql = "SELECT * FROM article";
         $stmt = $pdo->prepare($sql);
@@ -161,16 +160,13 @@ $password = "atsuki0229";
             print '<td>'.$impressions.'</td>';
             print '</tr>';
             print '<tr>';
-
-            // 画像確認部分
-            
-            // print '<td id="gray">画像</td>';
-            // echo '<td><img src="', $images,'"></td>';
-            // print '</tr>';
+            print '<td id="gray">画像</td>';
+            echo '<td><img src="', $images,'"></td>';
+            print '</tr>';
             print '</table>';
             print'</br>';
         print'<div class="movement">';
-        print'<a href="trip_view.php">記事一覧へ移動</a>';
+        print'<a href="trip_view2.php">記事一覧へ移動</a>';
         print'</div>';
         print'</form>';
         print'</div>';
